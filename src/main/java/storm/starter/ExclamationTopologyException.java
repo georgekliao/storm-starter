@@ -20,7 +20,7 @@ import storm.starter.spout.GeorgeWordSpout;
 /**
  * This is a basic example of a Storm topology.
  */
-public class ExclamationTopologySlow {
+public class ExclamationTopologyException {
 
     public static Logger LOG = LoggerFactory.getLogger(GeorgeWordSpout.class);
 
@@ -35,15 +35,23 @@ public class ExclamationTopologySlow {
 
         @Override
         public void execute(Tuple tuple) {
-            LOG.info("Presleep preemit: " + tuple.getMessageId());
-            Utils.sleep(1000);
-            LOG.info("Postsleep preemit: " + tuple.getMessageId());
+            LOG.info("Preexception preemit: " + tuple.getMessageId());
+
+            if (tuple.getMessageId() != null) {
+                throw new NullPointerException("preemit: " + tuple.getStringByField("word") + ", " + tuple.getMessageId());
+            }
+
+            LOG.info("Preexception preemit: " + tuple.getMessageId());
 
             _collector.emit(tuple, new Values(tuple.getString(0) + "!!!"));
 
-            LOG.info("Presleep postemit: " + tuple.getMessageId());
-            Utils.sleep(1000);
-            LOG.info("Postsleep postemit: " + tuple.getMessageId());
+            LOG.info("Preexception postemit: " + tuple.getMessageId());
+
+            if (tuple.getMessageId() != null) {
+                throw new NullPointerException("preemit: " + tuple.getStringByField("word") + ", " + tuple.getMessageId());
+            }
+            
+            LOG.info("Preexception postemit: " + tuple.getMessageId());
 
             _collector.ack(tuple);
         }

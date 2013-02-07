@@ -49,9 +49,11 @@ public class GeorgeWordSpout extends BaseRichSpout {
     }
 
     public void ack(Object msgId) {
+        LOG.info("Acking: " + msgId);
     }
 
     public void fail(Object msgId) {
+        LOG.info("Failing: " + msgId);
     }
 
     public void declareOutputFields(OutputFieldsDeclarer declarer) {
